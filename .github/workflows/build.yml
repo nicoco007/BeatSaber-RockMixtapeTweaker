@@ -1,0 +1,50 @@
+name: Build
+
+on:
+  push:
+    paths:
+    - .github/workflows/build.yml
+    - RockMixtapeTweaker/**
+    - RockMixtapeTweaker.sln
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+    - name: Check out
+      uses: actions/checkout@v3
+
+    - name: Set up environment
+      run: ${{ github.workspace }}\.github\workflows\set_up_env.ps1 "${{ github.workspace }}\RockMixtapeTweaker\manifest.json"
+
+    - name: Fetch Beat Saber Bindings
+      uses: actions/checkout@v3
+      with:
+        repository: nicoco007/BeatSaberBindings
+        ref: v${{ env.GAME_VERSION }}
+        token: ${{ secrets.PRIVATE_GITHUB_TOKEN }}
+        path: ${{ github.workspace }}\BeatSaberBindings\Beat Saber_Data\Managed
+
+    - name: Download dependencies
+      uses: nicoco007/download-beatmods-deps@main
+      with:
+        manifest: ${{ github.workspace }}\RockMixtapeTweaker\manifest.json
+        path: ${{ github.workspace }}\BeatSaberBindings
+
+    - name: Build Debug
+      run: dotnet publish ${{ github.workspace }}\RockMixtapeTweaker\RockMixtapeTweaker.csproj -c Debug -p:BeatSaberDir=${{ github.workspace }}\BeatSaberBindings
+
+    - name: Upload Debug
+      uses: actions/upload-artifact@v3
+      with:
+        name: BeatSaberRockMixtapeTweaker-${{ env.ZIP_VERSION }}-DEBUG
+        path: ${{ github.workspace }}\RockMixtapeTweaker\bin\Debug\publish
+
+    - name: Build Release
+      run: dotnet publish ${{ github.workspace }}\RockMixtapeTweaker\RockMixtapeTweaker.csproj -c Release -p:BeatSaberDir=${{ github.workspace }}\BeatSaberBindings
+
+    - name: Upload Release
+      uses: actions/upload-artifact@v3
+      with:
+        name: BeatSaberRockMixtapeTweaker-${{ env.ZIP_VERSION }}-RELEASE
+        path: ${{ github.workspace }}\RockMixtapeTweaker\bin\Release\publish
