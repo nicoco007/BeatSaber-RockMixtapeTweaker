@@ -5,9 +5,9 @@
   "author": "nicoco007",
   "version": "1.0.0",
   "description": "Minor fixes related to the Rock Mixtape environment.",
-  "gameVersion": "1.27.0",
+  "gameVersion": "1.30.0",
   "dependsOn": {
-    "BSIPA": "^4.2.2",
+    "BSIPA": "^4.3.0",
     "SiraUtil": "^3.0.0"
   }
 }

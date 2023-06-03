@@ -15,7 +15,7 @@ internal static class TubeBloomPrePassLight_OnEnable
             SetValues(__instance, 2f, 1);
         }
 
-        if (__instance.transform.parent.name == "GuitarStringLaser")
+        if (__instance.transform.parent != null && __instance.transform.parent.name == "GuitarStringLaser")
         {
             SetValues(__instance, 0.1f, 1);
         }

@@ -12,15 +12,15 @@ namespace RockMixtapeTweaker;
 public class Plugin
 {
     internal static Settings settings = null!;
+    internal static Logger log = null!;
 
     private readonly Harmony _harmony = new("com.nicoco007.rock-mixtape-improver");
-    private readonly Logger _logger;
 
     [Init]
     public Plugin(Config config, Logger logger, Zenjector zenjector)
     {
         settings = config.Generated<Settings>();
-        _logger = logger;
+        log = logger;
 
         zenjector.Install<GameplayCoreInstaller>(container =>
         {
@@ -31,7 +31,7 @@ public class Plugin
     [OnEnable]
     public void OnEnable()
     {
-        _logger.Info($"{nameof(RockMixtapeTweaker)} enabled.");
+        log.Info($"{nameof(RockMixtapeTweaker)} enabled.");
         _harmony.PatchAll();
     }
 
@@ -39,6 +39,6 @@ public class Plugin
     public void OnDisable()
     {
         _harmony.UnpatchSelf();
-        _logger.Info($"{nameof(RockMixtapeTweaker)} disabled.");
+        log.Info($"{nameof(RockMixtapeTweaker)} disabled.");
     }
 }

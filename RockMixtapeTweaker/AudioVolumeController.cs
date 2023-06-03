@@ -16,7 +16,9 @@ namespace RockMixtapeTweaker
         public void Initialize()
         {
             IBeatmapLevel level = _gameplayCoreSceneSetupData.difficultyBeatmap.level;
-            _audioManager.musicVolume = _perceivedLoudnessPerLevelModel.GetLoudnessCorrectionByLevelId(level.levelID);
+            float volume = _perceivedLoudnessPerLevelModel.GetLoudnessCorrectionByLevelId(level.levelID);
+            Plugin.log.Notice($"Overriding volume: set to {volume}");
+            _audioManager.musicVolume = volume;
         }
     }
 }
